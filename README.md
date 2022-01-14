@@ -1,22 +1,24 @@
-# size-label-action
+# size-label-action-with-proxy-support
 
 GitHub action to assign labels based on pull request change sizes.
 
 Labels are taken from https://github.com/kubernetes/kubernetes/labels?q=size
+
+Based on pascalgn/size-label-action and updates from @donovanmuller's pull request: https://github.com/pascalgn/size-label-action/pull/28 to add proxy support.
 
 ## Usage
 
 Create a `.github/workflows/size-label.yml` file:
 
 ```yaml
-name: size-label
+name: size-label-action-with-proxy-support
 on: pull_request
 jobs:
-  size-label:
+  size-label-action-with-proxy-support:
     runs-on: ubuntu-latest
     steps:
-      - name: size-label
-        uses: "pascalgn/size-label-action@v0.4.3"
+      - name: size-label-action-with-proxy-support
+        uses: "casr-anz/size-label-action-with-proxy-support@v0.0.2"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 ```
@@ -68,14 +70,14 @@ The default sizes are:
 You can pass your own configuration by passing `sizes`
 
 ```yaml
-name: size-label
+name: size-label-action-with-proxy-support
 on: pull_request
 jobs:
-  size-label:
+  size-label-action-with-proxy-support:
     runs-on: ubuntu-latest
     steps:
-      - name: size-label
-        uses: "pascalgn/size-label-action@v0.4.2"
+      - name: size-label-action-with-proxy-support
+        uses: "casr-anz/size-label-action-with-proxy-support-action@v0.0.2"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:

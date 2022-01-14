@@ -1,13 +1,13 @@
 {
-  "name": "size-label-action",
-  "version": "0.0.1",
-  "description": "GitHub action to assign labels based on pull request change sizes",
+  "name": "size-label-action-with-proxy-support",
+  "version": "0.0.2",
+  "description": "GitHub action to assign labels based on pull request change sizes, with proxy support",
   "main": "index.js",
-  "author": "Pascal",
+  "author": "casr-anz",
   "license": "MIT",
   "private": true,
   "bin": {
-    "size-label-action": "index.js"
+    "size-label-action-with-proxy-support": "index.js"
   },
   "scripts": {
     "test": "yarn compile && node test.js",
@@ -16,14 +16,15 @@
     "prepublish": "yarn compile"
   },
   "dependencies": {
-    "@octokit/rest": "^18.5.5",
+    "@octokit/rest": "^18.12.0",
     "diff": "^5.0.0",
-    "globrex": "^0.1.2"
+    "globrex": "^0.1.2",
+    "https-proxy-agent": "^5.0.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.28.6",
-    "dotenv": "^10.0.0",
-    "eslint": "^7.27.0",
+    "@vercel/ncc": "^0.33.1",
+    "dotenv": "^11.0.0",
+    "eslint": "^8.6.0",
     "tmp": "^0.2.1"
   },
   "prettier": {

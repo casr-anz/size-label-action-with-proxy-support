@@ -1,4 +1,4 @@
-name: "Assign size label"
+name: "Assign size label, with proxy support"
 description: "Assign labels based on pull request change sizes"
 inputs:
   sizes:

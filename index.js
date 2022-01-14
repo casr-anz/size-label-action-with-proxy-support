@@ -7,6 +7,8 @@ const { Octokit } = require("@octokit/rest");
 const globrex = require("globrex");
 const Diff = require("diff");
 
+const HttpsProxyAgent = require("https-proxy-agent");
+
 const defaultSizes = {
   0: "XS",
   10: "S",
@@ -21,7 +23,7 @@ const actions = ["opened", "synchronize", "reopened"];
 const globrexOptions = { extended: true, globstar: true };
 
 async function main() {
-  debug("Running size-label-action...");
+  debug("Running size-label-action-with-proxy-support...");
 
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
   if (!GITHUB_TOKEN) {
@@ -56,9 +58,11 @@ async function main() {
 
   const pull_number = eventData.pull_request.number;
 
+  const proxyUrl = process.env.HTTPS_PROXY || process.env.https_proxy
   const octokit = new Octokit({
     auth: `token ${GITHUB_TOKEN}`,
-    userAgent: "pascalgn/size-label-action"
+    userAgent: "casr-anz/size-label-action-with-proxy-support",
+    ...(proxyUrl !== undefined) && {request: { agent: new HttpsProxyAgent(proxyUrl) }},
   });
 
   const pullRequestDiff = await octokit.pulls.get({
