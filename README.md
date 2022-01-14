@@ -1,10 +1,13 @@
 # size-label-action-with-proxy-support
 
-GitHub action to assign labels based on pull request change sizes.
+GitHub action to assign labels based on pull request change sizes, with proxy support for running on enterprise self-hosted runners.
 
-Labels are taken from https://github.com/kubernetes/kubernetes/labels?q=size
+Based on pascalgn/size-label-action with updates from @donovanmuller's pull request: https://github.com/pascalgn/size-label-action/pull/28 to add proxy support.
 
-Based on pascalgn/size-label-action and updates from @donovanmuller's pull request: https://github.com/pascalgn/size-label-action/pull/28 to add proxy support.
+The default labels are taken from https://github.com/kubernetes/kubernetes/labels?q=size
+
+Changes from the original
+ - `size/` is no longer added as a default prefix to custom labels
 
 ## Usage
 
@@ -18,12 +21,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: size-label-action-with-proxy-support
-        uses: "casr-anz/size-label-action-with-proxy-support@v0.0.2"
+        uses: "casr-anz/size-label-action-with-proxy-support@v0.5.0"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 ```
 
 ## Create the needed labels
+
+This is optional. The labels will be created automatically if they are not already present in the repository when the action runs.
 
 Export both `GITHUB_TOKEN` and `REPO` (e.g. `my-username/my-repository`) and run the script below:
 
@@ -58,12 +63,12 @@ The default sizes are:
 
 ```js
 {
-  "0": "XS",
-  "10": "S",
-  "30": "M",
-  "100": "L",
-  "500": "XL",
-  "1000": "XXL"
+  "0": "size/XS",
+  "10": "size/S",
+  "30": "size/M",
+  "100": "size/L",
+  "500": "size/XL",
+  "1000": "size/XXL"
 }
 ```
 
@@ -77,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: size-label-action-with-proxy-support
-        uses: "casr-anz/size-label-action-with-proxy-support-action@v0.0.2"
+        uses: "casr-anz/size-label-action-with-proxy-support-action@v0.5.0"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:

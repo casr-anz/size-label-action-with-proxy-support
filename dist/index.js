@@ -16,12 +16,12 @@ const Diff = __nccwpck_require__(1672);
 const HttpsProxyAgent = __nccwpck_require__(7219);
 
 const defaultSizes = {
-  0: "XS",
-  10: "S",
-  30: "M",
-  100: "L",
-  500: "XL",
-  1000: "XXL"
+  0: "size/XS",
+  10: "size/S",
+  30: "size/M",
+  100: "size/L",
+  500: "size/XL",
+  1000: "size/XXL"
 };
 
 const actions = ["opened", "synchronize", "reopened"];
@@ -83,11 +83,13 @@ async function main() {
   console.log("Changed lines:", changedLines);
 
   const sizes = getSizesInput();
+  const validSizeLabels = Object.values(sizes);
   const sizeLabel = getSizeLabel(changedLines, sizes);
   console.log("Matching label:", sizeLabel);
 
   const { add, remove } = getLabelChanges(
     sizeLabel,
+    validSizeLabels,
     eventData.pull_request.labels
   );
 
@@ -97,7 +99,7 @@ async function main() {
   }
 
   if (add.length > 0) {
-    debug("Adding labels:", add);
+    console.log("Adding labels:", add);
     await octokit.issues.addLabels({
       ...pullRequestHome,
       issue_number: pull_number,
@@ -106,7 +108,7 @@ async function main() {
   }
 
   for (const label of remove) {
-    debug("Removing label:", label);
+    console.log("Removing label:", label);
     try {
       await octokit.issues.removeLabel({
         ...pullRequestHome,
@@ -186,23 +188,21 @@ function getSizeLabel(changedLines, sizes = defaultSizes) {
   let label = null;
   for (const lines of Object.keys(sizes).sort((a, b) => a - b)) {
     if (changedLines >= lines) {
-      label = `size/${sizes[lines]}`;
+      label = `${sizes[lines]}`;
     }
   }
   return label;
 }
 
-function getLabelChanges(newLabel, existingLabels) {
-  const add = [newLabel];
+function getLabelChanges(newSizeLabel, validSizeLabels, existingLabels) {
+  const add = [newSizeLabel];
   const remove = [];
   for (const existingLabel of existingLabels) {
     const { name } = existingLabel;
-    if (name.startsWith("size/")) {
-      if (name === newLabel) {
-        add.pop();
-      } else {
-        remove.push(name);
-      }
+    if (name === newSizeLabel) {
+      add.pop();
+    } else if (validSizeLabels.includes(name)) {
+      remove.push(name);
     }
   }
   return { add, remove };
